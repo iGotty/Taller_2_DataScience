@@ -4,7 +4,8 @@
       "Bash(git init:*)",
       "Bash(cd:*)",
       "Bash(cd /home/gotty/Documents/Personal\\ Projects/Taller_2_DataScience && python3 src/utils.py:*)",
-      "Bash(timeout 30 python3 src/01_analisis_exploratorio.py)"
+      "Bash(timeout 30 python3 src/01_analisis_exploratorio.py)",
+      "Bash(python3:*)"
     ],
     "deny": [],
     "ask": []
