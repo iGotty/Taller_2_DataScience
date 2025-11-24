@@ -245,22 +245,36 @@ def analizar_caracteristicas_numericas(df):
             if i < len(axes):
                 datos_limpios = df[columna].dropna()
 
-                axes[i].hist(datos_limpios, bins=30, edgecolor='black',
-                           alpha=0.7, color='teal')
-                axes[i].set_xlabel(columna, fontsize=10)
-                axes[i].set_ylabel('Frecuencia', fontsize=10)
-                axes[i].set_title(f'Distribución: {columna}',
-                                fontsize=11, fontweight='bold')
-                axes[i].grid(True, alpha=0.3)
+                # Verificar si la columna es numérica
+                if pd.api.types.is_numeric_dtype(df[columna]):
+                    axes[i].hist(datos_limpios, bins=30, edgecolor='black',
+                               alpha=0.7, color='teal')
+                    axes[i].set_xlabel(columna, fontsize=10)
+                    axes[i].set_ylabel('Frecuencia', fontsize=10)
+                    axes[i].set_title(f'Distribución: {columna}',
+                                    fontsize=11, fontweight='bold')
+                    axes[i].grid(True, alpha=0.3)
 
-                # Agregar estadísticas en el gráfico
-                media = datos_limpios.mean()
-                mediana = datos_limpios.median()
-                axes[i].axvline(media, color='red', linestyle='--',
-                              linewidth=1.5, alpha=0.7, label=f'Media: {media:.1f}')
-                axes[i].axvline(mediana, color='green', linestyle='--',
-                              linewidth=1.5, alpha=0.7, label=f'Mediana: {mediana:.1f}')
-                axes[i].legend(fontsize=8)
+                    # Agregar estadísticas en el gráfico
+                    media = datos_limpios.mean()
+                    mediana = datos_limpios.median()
+                    axes[i].axvline(media, color='red', linestyle='--',
+                                  linewidth=1.5, alpha=0.7, label=f'Media: {media:.1f}')
+                    axes[i].axvline(mediana, color='green', linestyle='--',
+                                  linewidth=1.5, alpha=0.7, label=f'Mediana: {mediana:.1f}')
+                    axes[i].legend(fontsize=8)
+                else:
+                    # Para columnas no numéricas, hacer gráfico de barras de conteo
+                    valores_conteo = datos_limpios.value_counts().head(10)
+                    axes[i].bar(range(len(valores_conteo)), valores_conteo.values,
+                              color='steelblue', edgecolor='black', alpha=0.7)
+                    axes[i].set_xticks(range(len(valores_conteo)))
+                    axes[i].set_xticklabels(valores_conteo.index, rotation=45, ha='right', fontsize=8)
+                    axes[i].set_xlabel(columna, fontsize=10)
+                    axes[i].set_ylabel('Frecuencia', fontsize=10)
+                    axes[i].set_title(f'Distribución: {columna}',
+                                    fontsize=11, fontweight='bold')
+                    axes[i].grid(True, alpha=0.3, axis='y')
 
         # Ocultar ejes no utilizados
         for i in range(len(caracteristicas_disponibles), len(axes)):
