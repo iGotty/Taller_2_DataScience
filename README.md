@@ -288,8 +288,8 @@ Insights completos disponibles en: `reports/reporte_ejecutivo.md`
 
 ## Autores
 
-- **Nombre Estudiante 1** - [GitHub](https://github.com/username1)
-- **Nombre Estudiante 2** - [GitHub](https://github.com/username2)
+- **Juan  Cuellar** 
+- **Juan Valencia** 
 
 **Curso:** MINE-4101 - Ciencia de Datos Aplicada
 **Institución:** Universidad de los Andes
