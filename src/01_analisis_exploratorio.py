@@ -129,15 +129,20 @@ def analizar_variable_objetivo(df):
         valor = precio_venta_limpio.quantile(p/100)
         print(f"  Percentil {p:2d}: {formatear_cop(valor)}")
 
+    # Filtrar outliers extremos para visualización
+    # Usamos percentil 99 para evitar que outliers extremos distorsionen el histograma
+    limite_viz = precio_venta_limpio.quantile(0.99)
+    precio_viz = precio_venta_limpio[precio_venta_limpio <= limite_viz]
+
     # Visualización: Distribución original
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 
-    # Histograma
-    axes[0, 0].hist(precio_venta_limpio, bins=100, edgecolor='black',
+    # Histograma (sin outliers extremos para mejor visualización)
+    axes[0, 0].hist(precio_viz, bins=100, edgecolor='black',
                     alpha=0.7, color='steelblue')
     axes[0, 0].set_xlabel('Precio de Venta (COP)', fontsize=11)
     axes[0, 0].set_ylabel('Frecuencia', fontsize=11)
-    axes[0, 0].set_title('Distribución de Precios de Venta',
+    axes[0, 0].set_title('Distribución de Precios de Venta (hasta percentil 99)',
                          fontsize=12, fontweight='bold')
     axes[0, 0].grid(True, alpha=0.3)
     axes[0, 0].axvline(precio_venta_limpio.median(), color='red',
@@ -145,6 +150,14 @@ def analizar_variable_objetivo(df):
     axes[0, 0].axvline(precio_venta_limpio.mean(), color='green',
                        linestyle='--', linewidth=2, label='Media')
     axes[0, 0].legend()
+
+    # Agregar nota sobre outliers
+    n_outliers_extremos = len(precio_venta_limpio) - len(precio_viz)
+    pct_outliers = (n_outliers_extremos / len(precio_venta_limpio)) * 100
+    axes[0, 0].text(0.98, 0.98, f'Nota: {n_outliers_extremos:,} valores extremos\n({pct_outliers:.2f}%) excluidos para\nmejor visualización',
+                    transform=axes[0, 0].transAxes,
+                    fontsize=9, verticalalignment='top', horizontalalignment='right',
+                    bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
 
     # Boxplot
     bp = axes[0, 1].boxplot(precio_venta_limpio, vert=True, patch_artist=True)
